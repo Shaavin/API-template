@@ -1,0 +1,21 @@
+FROM node:18
+
+EXPOSE 8080
+
+WORKDIR /app
+
+COPY package.json yarn.lock ./
+
+COPY . .
+
+RUN yarn global add prisma
+
+RUN yarn
+
+RUN yarn db:generate
+
+RUN yarn db:migrate-prod
+
+RUN yarn build
+
+CMD ["node", "dist/main"]

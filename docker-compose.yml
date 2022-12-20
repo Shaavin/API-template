@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  api:
+    image: docker-api-dev
+    container_name: template-api
+    build: .
+    ports:
+      - 8080:8080
+      - 5555:5555
+      - 3001:3001
+    depends_on:
+      - postgres
+      # Mappings between project directory & Docker work directory
+    volumes:
+      - ./:/app
+
+  postgres:
+    # Official Postgres image from DockerHub
+    image: 'postgres:13.6'
+    container_name: template-db
+    ports:
+      - 5432:5432
+
+    environment:
+      # The Postgres user
+      POSTGRES_USER: username
+      # The Postgres password
+      POSTGRES_PASSWORD: password
+      # The Postgres default database
+      POSTGRES_DB: default_database
+    # Mapping a volume named "data" to the Postgres data directory
+    volumes:
+      - data:/var/lib/postgresql/data/
+
+volumes:
+  data:
